@@ -944,7 +944,7 @@ abstract class Sprig_Core {
 	 * @param   integer  number of records to load, FALSE for all
 	 * @return  $this
 	 */
-	public function load(Database_Query_Builder_Select $query = NULL, $limit = 1)
+	public function load(Database_Query_Builder_Select $query = NULL, $limit = 1, $as_assoc = FALSE)
 	{
 		// Load changed values as search parameters
 		$changed = $this->changed();
@@ -1008,9 +1008,18 @@ abstract class Sprig_Core {
 		}
 		else
 		{
-			return $query
-				->as_object(get_class($this))
-				->execute($this->_db);
+			if ($as_assoc === TRUE)
+			{
+				return $query
+					->as_assoc()
+					->execute($this->_db);
+			}
+			else
+			{
+				return $query
+					->as_object(get_class($this))
+					->execute($this->_db);
+			}
 		}
 	}
 
